@@ -28,7 +28,9 @@ const handleCodeExecution = async (req, res) => {
                 const code = req.body.code;
                 const input = req.body.input || "";
 
-                if (! checkCodeSanity(code, language)){
+                const result = checkCodeSanity(code, language);
+
+                if (!result){
                         console.log("Code validation failed, malicious content detected");
                         return res.status(400).json({
                                 error: "Code contains malicious content",

@@ -1,56 +1,74 @@
-const validatePython = [
-  "import os",
-  "import subprocess",
-  "from os import",
-  "from subprocess import",
-];
+const patterns = {
+        python: [
+                /import\s+os/i,
+                /import\s+sys/i,
+                /import\s+subprocess/i,
+                /from\s+os\s+import/i,
+                /from\s+subprocess\s+import/i,
+                /__import__\s*\(/i,
+                /open\s*\(/i,
+                /eval\s*\(/i,
+                /exec\s*\(/i,
+        ],
 
-const validateCpp = ["popen", "fork", "system(", "unistd.h"];
+        java: [
+                /Runtime\.getRuntime\s*\(\)/i,
+                /ProcessBuilder/i,
+                /new\s+Process/i,
+                /\.exec\s*\(/i,
+                /System\.load/i,
+                /System\.loadLibrary/i,
+        ],
 
-const validateC = ["fork", "system("];
+        cpp: [
+                /system\s*\(/i,
+                /fork\s*\(/i,
+                /popen\s*\(/i,
+                /execvp?\s*\(/i,
+                /unistd\.h/i,
+        ],
 
-const validateJava = [
-  "Process",
-  "getRuntime()",
-  "exec(",
-  "ProcessBuilder",
-  "start()",
-];
+        c: [
+                /system\s*\(/i,
+                /fork\s*\(/i,
+                /execvp?\s*\(/i,
+                /unistd\.h/i,
+        ],
+}
 
-const checkCodeSanity = (code, language) => {
-  let result = true;
-  blacklist = '';
+function stripComments(code, language) {
+        if (language === "python") {
+                return code.replace(/#.*/g, "");
+        }
 
-  switch (language) {
+        // C / C++ / Java
+        return code
+                .replace(/\/\/.*$/gm, "")
+                .replace(/\/\*[\s\S]*?\*\//g, "");
+}
 
-    case 'python':
-      blacklist = validatePython
-      break;
 
-    case 'java':
-      blacklist = validateJava
-      break;
+function normalize(code) {
+        return code
+                .toLowerCase()
+                .replace(/\s+/g, " ");
+}
 
-    case 'cpp':
-      blacklist = validateCpp
-      break;
 
-    case 'c':
-      blacklist = validateC
-      break;
+function checkCodeSanity(code, language) {
+        if (!patterns[language]) {
+                return false;
+        }
 
-    default:
-      break;
-  }
+        const cleaned = normalize(stripComments(code, language));
 
-  blacklist.forEach((ele) => {
-    if (code.includes(ele)) {
-      result = false;
-      console.log("This code contains malicious content");
-      return;
-    }
-  });
-  return result;
-};
+        for (const pattern of patterns[language]) {
+                if (pattern.test(cleaned)) {
+                        return false;
+                }
+        }
+
+        return true;
+}
 
 module.exports = checkCodeSanity;
