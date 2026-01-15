@@ -5,7 +5,7 @@ require("dotenv").config();
 
 const {connectDB} = require('./services/database');
 
-const { loginController, registerController } = require('./controller/authHandler');
+const { loginController, registerController, validateToken } = require('./controller/authHandler');
 
 const app = express();
 const PORT  = process.env.PORT || 5000;
@@ -19,11 +19,13 @@ const CORS_OPTIONS = {
 }
 
 app.use(cors(CORS_OPTIONS));
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.post('/auth/login', loginController);
 app.post('/auth/register', registerController);
+app.get('/auth/validate', validateToken);
 
 (async () => {
         try {

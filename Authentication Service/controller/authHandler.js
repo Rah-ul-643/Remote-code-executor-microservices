@@ -1,8 +1,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-    
+
 const users = require('../models/users');
-const secretKey = process.env.JWT_SECRET_KEY;
+const secretKey = process.env.JWT_SECRET_KEY || "secret";
 
 const loginController = async (req, res) => {
     const { username, password } = req.body;
@@ -62,4 +62,30 @@ const registerController = async (req, res) => {
 
 }
 
-module.exports = { loginController, registerController };
+const validateToken = (req, res) => {
+    const token = req.cookies.token;
+
+    if (!token) {
+        console.log('Expired Token');
+        res.status(401).json({ message: "Token Expired!" });
+    }
+    else {
+        jwt.verify(token, secretKey, (err) => {
+            if (err) {
+                console.log('Invalid Token; Code submission request rejected');
+                res.clearCookie('token', {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: 'None',
+                });
+                res.status(401).json({ message: "Unauthorized access!" });
+            }
+            else {
+                res.status(200).json({ success: true, message: "Token valid" });
+            }
+        })
+
+    }
+}
+
+module.exports = { loginController, registerController, validateToken };

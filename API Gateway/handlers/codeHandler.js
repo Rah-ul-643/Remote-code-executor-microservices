@@ -38,7 +38,7 @@ const handleCodeExecution = async (req, res) => {
                 }
 
                 const requestObject = {
-                        requestId: generateRequestId(),
+                        requestId: generateRequestId(req.username),
                         clientSubmissionId: submissionId,
                         username: req.username,
                         language: language,
@@ -89,10 +89,10 @@ const checkRequestValidity = (req) => {
         return true;
 }
 
-const generateRequestId = () => {
+const generateRequestId = (username) => {
         // return Request ID -> string of length 68.
         
-        const str = req.username + '_' + Date.now();
+        const str = username + '_' + Date.now();
         const hashString = crypto.createHash("sha256").update(str).digest("hex");
         return 'req_' + hashString;
 }

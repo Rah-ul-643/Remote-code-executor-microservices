@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL || "http://localhost:5001";
+const AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL || "http://localhost:5000";
 
 const handleAuth = async (req, res) => {
 
@@ -16,6 +16,7 @@ const handleAuth = async (req, res) => {
                         data: req.body,
                         headers: {
                                 "Content-Type": "application/json",
+                                Cookie: req.headers.cookie || "",
                         },
                         withCredentials: true,
                 });

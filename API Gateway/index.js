@@ -13,7 +13,7 @@ const handleCodeExecution = require("./handlers/codeHandler");
 
 const app = express();
 const PORT  = process.env.PORT || 3000;
-const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:4000';
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3001';
 
 const CORS_OPTIONS = {
         origin: CLIENT_URL,
@@ -23,12 +23,13 @@ const CORS_OPTIONS = {
 }
 
 app.use(cors(CORS_OPTIONS));
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // TODO: implement rate limiting.
 
-app.post('/auth', handleAuth);
+app.use('/auth', handleAuth);
 app.post('/code', auth, handleCodeExecution);
 
 (async () => {
