@@ -36,14 +36,14 @@ io.on('connection', (socket) => {
                 userToSocket.delete(username);
         });
 
-        socket.on('register-user', async (username) => {
+        socket.on('register-user', async (username, ack) => {
                 userToSocket.set(username, socket.id);
                 socketToUser.set(socket.id, username);
                 console.log('Registered user:', username, 'with socket ID:', socket.id);
 
                 // Fetch and send submission history
                 const submissionHistory = await fetchSubmissionHistory(username);
-                socket.emit('set-submission-history', submissionHistory);
+                ack(submissionHistory);
         });
 
         socket.on('join-room', (roomID, initialCode, setCode) => {

@@ -53,7 +53,7 @@ const subscribeToResults = async (redisSubscriber, io) => {
                         console.log("Emitted execution result and updated submission history to user:", username);
 
                 } catch (err) {
-                        console.error("Error handling execution event:");
+                        console.error("Error handling execution event:", err);
                 }
         });
 };
