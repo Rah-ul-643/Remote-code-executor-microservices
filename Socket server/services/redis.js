@@ -8,7 +8,7 @@ const EVENT_NAME = "execution_events";
 const createRedisSubscriber = async () => {
         try {
                 const subscriber = createClient({
-                        url: REDIS_URL || "redis://localhost:6379",
+                        url: REDIS_URL,
                 });
                 await subscriber.connect();
                 console.log("Connected to Redis server successfully");
