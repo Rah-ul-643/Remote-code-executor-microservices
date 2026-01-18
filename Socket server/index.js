@@ -6,7 +6,7 @@ require('dotenv').config();
 const { connectDB, fetchSubmissionHistory } = require('./services/database');
 const { createRedisSubscriber,subscribeToResults } = require('./services/redis');
 
-const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3001';
 const PORT = process.env.PORT || 4001;
 
 const app = express();

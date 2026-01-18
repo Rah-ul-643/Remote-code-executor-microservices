@@ -1,15 +1,12 @@
 package redisclient
 
 import (
-	"fmt"
 	"log"
 )
 
-func EnsureConsumerGroup (stream string, group string) {
-	log.Println("Inside Ensure consumer group method. Stream and group are:")
-	fmt.Println(stream, group)
-	
-	err := Rdb.XGroupCreateMkStream(
+func (client *RedisClient) EnsureConsumerGroup (stream string, group string) {
+
+	err := client.Rdb.XGroupCreateMkStream(
 		Ctx,
 		stream,
 		group,
@@ -17,14 +14,14 @@ func EnsureConsumerGroup (stream string, group string) {
 	).Err()
 
 	if err != nil && err.Error() != "BUSYGROUP Consumer Group name already exists" {
-		log.Fatalf("❌ Failed to create group %s on %s: %v", group, stream, err)
+		log.Fatalf("Failed to create group %s on %s: %v", group, stream, err)
 	}
 
-	log.Printf("✅ Consumer group ready: stream=%s group=%s\n", stream, group)
+	log.Printf("Consumer group ready: stream=%s group=%s\n", stream, group)
 }
 
-func AckJob (stream string, group string, messageID string) error {
-	return Rdb.XAck(
+func (client *RedisClient) AckJob (stream string, group string, messageID string) error {
+	return client.Rdb.XAck(
 		Ctx,
 		stream,
 		group,

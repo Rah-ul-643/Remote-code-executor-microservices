@@ -2,7 +2,7 @@ package worker
 
 import (
 	"encoding/json"
-	"os"
+	"fmt"
 	"log"
 
 	"github.com/google/uuid"
@@ -12,21 +12,16 @@ import (
 	"github.com/rah-ul-643/Code-Executor/internal/types"
 )
 
-const WorkerCount = 4
-var (
-	RESULT_CHANNEL = os.Getenv("RESULT_CHANNEL")
-	STREAM = os.Getenv("STREAM_NAME") // "code_execution_jobs"
-	GROUP = os.Getenv("EXECUTOR_GROUP_NAME") // "executor_group"
-	CONSUMER = os.Getenv("CONSUMER_NAME")	// "worker_1"
-)
 
-func StartWorkerPool(jobChan <-chan types.Job) {
-	for i := 1; i <= WorkerCount; i++ {
-		go worker(i, jobChan)
+const WORKER_COUNT = 8
+
+func StartWorkerPool(jobChan <-chan types.Job, pubSubClient *redisclient.RedisClient, streamClient *redisclient.RedisClient, cfg types.Config) {
+	for i := 1; i <= WORKER_COUNT; i++ {
+		go worker(i, jobChan, pubSubClient, streamClient, cfg)
 	}
 }
 
-func worker(id int, jobs <-chan types.Job) {
+func worker(id int, jobs <-chan types.Job, pubSubClient *redisclient.RedisClient, streamClient *redisclient.RedisClient, cfg types.Config) {
 	log.Printf("Worker %d started\n", id)
 
 	for job := range jobs {
@@ -53,6 +48,7 @@ func worker(id int, jobs <-chan types.Job) {
 			Error:     execResult.Error,
 		}
 
+
 		// 3️. Save result to DB
 		if err := db.SaveResult(dbResult); err != nil {
 			log.Println("Failed to save result:", err)
@@ -72,12 +68,12 @@ func worker(id int, jobs <-chan types.Job) {
 			continue
 		}
 
-		if err := redisclient.Publish(RESULT_CHANNEL, string(eventJSON)); err != nil {
+		if err := pubSubClient.Publish(cfg.ResultChannel, string(eventJSON)); err != nil {
 			log.Println("Failed to publish result:", err)
 		}
 
-		// 5️. ACK Redis Stream job
-		if err := redisclient.AckJob(STREAM, GROUP, job.RedisID); err != nil {
+		// 5️. ACK Redis Stream job 
+		if err := streamClient.AckJob(cfg.Stream, cfg.Group, job.RedisID); err != nil {
 			log.Println("Failed to ACK job:", err)
 		}
 

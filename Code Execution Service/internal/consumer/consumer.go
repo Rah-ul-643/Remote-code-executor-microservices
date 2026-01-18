@@ -8,16 +8,16 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-func StartConsumer(streamName, groupName, consumerName string, jobChan chan<- types.Job) {
+func StartConsumer(streamsClient *redisclient.RedisClient, cfg types.Config, jobChan chan<- types.Job) {
 	log.Println("Executor consumer started")
 
 	for {
-		streams, err := redisclient.Rdb.XReadGroup(
+		streams, err := streamsClient.Rdb.XReadGroup(
 			redisclient.Ctx,
 			&redis.XReadGroupArgs{
-				Group:    groupName,
-				Consumer: consumerName,
-				Streams:  []string{streamName, ">"},
+				Group:    cfg.Group,
+				Consumer: cfg.Consumer,
+				Streams:  []string{cfg.Stream, ">"},
 				Count:    1,
 				Block:    0, // BLOCK forever
 			},

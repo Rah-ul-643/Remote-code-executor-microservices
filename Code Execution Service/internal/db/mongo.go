@@ -32,17 +32,17 @@ func ConnectMongo() {
 
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
 	if err != nil {
-		log.Fatal("❌ MongoDB connection failed:", err)
+		log.Fatal("MongoDB connection failed:", err)
 	}
 
 	if err := client.Ping(ctx, nil); err != nil {
-		log.Fatal("❌ MongoDB ping failed:", err)
+		log.Fatal(" MongoDB ping failed:", err)
 	}
 
 	Client = client
 	DB = client.Database(dbName)
 
-	log.Println("✅ MongoDB connected to database:", dbName)
+	log.Println(" MongoDB connected to database:", dbName)
 }
 
 func ResultsCollection() *mongo.Collection {
