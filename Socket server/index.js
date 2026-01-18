@@ -85,7 +85,7 @@ io.on('connection', (socket) => {
                 await connectDB();
 
                 const subscriber = await createRedisSubscriber();
-                await subscribeToResults(subscriber, io);
+                await subscribeToResults(subscriber, io, userToSocket);
 
                 server.listen(PORT, () => {
                         console.log(`Socket server is running on port ${PORT}`);

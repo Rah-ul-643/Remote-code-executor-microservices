@@ -20,7 +20,7 @@ const createRedisSubscriber = async () => {
         }
 }
 
-const subscribeToResults = async (redisSubscriber, io) => {
+const subscribeToResults = async (redisSubscriber, io, userToSocket) => {
 
         await redisSubscriber.subscribe(EVENT_NAME, async (message) => {
                 try {
