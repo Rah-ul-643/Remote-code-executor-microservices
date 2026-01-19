@@ -6,7 +6,7 @@ import { endpoints } from "../services/endpoints";
 import { useNavigate } from "react-router-dom";
 
 
-const Login = ({setIsLoggedIn}) => {
+const Login = ({setIsLoggedIn, setUserName}) => {
 
   const navigate = useNavigate();
 
@@ -30,12 +30,15 @@ const Login = ({setIsLoggedIn}) => {
 
     try {
       const response = await apiConnector("POST", endpoints.LOGIN_API, formData);
-      console.log(response.data);
 
       if (response.data.success) {
         const token = response.data.token;
+        const username = response.data.username;
+
         localStorage.setItem('token', JSON.stringify(token));
         setIsLoggedIn(true);
+        setUserName(username);
+
         toast.success("Successfully logged in");
         navigate('/');
 

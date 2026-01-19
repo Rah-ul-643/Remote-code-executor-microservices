@@ -22,7 +22,7 @@ const loginController = async (req, res) => {
                         sameSite: 'Lax',  // Allow cross-origin
                     }
                 );
-                res.json({ token: token, success: true, message: "Logged in successfully" });
+                res.json({ token: token, username : username , success: true, message: "Logged in successfully" });
             }
             else
                 res.send("Incorrect Password");
