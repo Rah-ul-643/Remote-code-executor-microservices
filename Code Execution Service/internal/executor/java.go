@@ -16,7 +16,9 @@ func runJava(code, input string,  time_limit int) (*types.Result, error){
 	tmpDir, _ := os.MkdirTemp("", "exec-*")
 	defer os.RemoveAll(tmpDir)
 
-	filename := utils.ExtractClassName(code);
+	classname := utils.ExtractClassName(code) 
+	filename := fmt.Sprintf("%s.java", classname)
+
 	if (filename == ""){
 		return &types.Result{Error : "No class provided"}, nil;
 	}
@@ -27,14 +29,13 @@ func runJava(code, input string,  time_limit int) (*types.Result, error){
 	defer cancel()
 
 	cmd := exec.CommandContext(ctx,
-		"docker", "run", "--rm",
-		"--network=none", "--cpus=1", "--memory=256m",
-		"-v", fmt.Sprintf("%s:/code:ro", tmpDir),
-		"openjdk:21-slim",
+		"docker", "run", "--rm", "-i",
+		"--network=none", "--cpus=1", "--memory=256m", "--memory-swap=256m", "--oom-kill-disable=false",
+		"-v", fmt.Sprintf("%s:/code", tmpDir),
+		"eclipse-temurin:17",
 		"sh", "-c",
-		"javac /code/Main.java && java -cp /code Main",
+		fmt.Sprintf("javac /code/%s && java -cp /code %s", filename, classname),
 	)
 
 	return executeCommand(ctx, cmd, input)
 }
-

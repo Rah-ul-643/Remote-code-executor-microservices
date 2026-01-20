@@ -22,9 +22,9 @@ func runCPP(code, input string,  time_limit int) (*types.Result, error) {
 	defer cancel()
 
 	cmd := exec.CommandContext(ctx,
-		"docker", "run", "--rm",
-		"--network=none", "--cpus=1", "--memory=256m",
-		"-v", fmt.Sprintf("%s:/code:ro", tmpDir),
+		"docker", "run", "--rm", "-i",
+		"--network=none", "--cpus=1", "--memory=256m", "--memory-swap=256m", "--oom-kill-disable=false",
+		"-v", fmt.Sprintf("%s:/code", tmpDir),
 		"gcc:13",
 		"sh", "-c",
 		"g++ /code/main.cpp -O2 -o /code/a.out && /code/a.out",
