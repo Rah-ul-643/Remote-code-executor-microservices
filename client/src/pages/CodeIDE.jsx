@@ -8,7 +8,7 @@ import EditorUtilityBar from "../components/EditorUtilityBar";
 import CollabCoding from "../components/ColabCoding";
 import ChatBox from "../components/ChatBox";
 
-import * as S from "../components/styled-components/CodeIDE.styles";
+import * as S from "../components/styled-components/codeIDE.styles";
 
 const {
   Main,
@@ -46,9 +46,10 @@ const DEFAULT_FIRST_FILE = {
 
 
 /* Component */
-const CodeIDE = ({userName}) => {
+const CodeIDE = () => {
   const [socket, setSocket] = useState(null);
   const socketRef = useRef(null);
+  const [Username, setUsername] = useState('');
 
   const [currentModal, setCurrentModal] = useState(0);
   const [formData, setFormData] = useState({
@@ -61,6 +62,8 @@ const CodeIDE = ({userName}) => {
   const currFileRef = useRef(currFile);
 
   const [roomId, setRoomId] = useState(null);
+
+  const [ResultToastId, setResultToastId] = useState('');
 
   // keep refs in sync for event handlers
   useEffect(() => {
@@ -84,8 +87,13 @@ const CodeIDE = ({userName}) => {
     socketRef.current = sock;
     setSocket(sock);
 
-    if (userName) {
-      sock.emit("register-user", userName, (submissionHistory) => {
+    const decodedUsername = decodeToken();
+    if (decodedUsername != null){
+      setUsername(decodedUsername);
+    }
+
+    if (Username) {
+      sock.emit("register-user", Username, (submissionHistory) => {
         // quiet log; useful for debugging
         console.log("Submission History:", submissionHistory);
       });
@@ -106,6 +114,20 @@ const CodeIDE = ({userName}) => {
 
     const onExecutionResult = (result) => {
       console.log("Execution Result:", result);
+      toast.dismiss(ResultToastId);
+      
+      if (result.status === "FAILED"){
+        toast.error("Error in Code");
+        changeHandler('output', result.stderr); 
+      }
+      else if (result.status==="TLE"){
+        toast.error("Time Limit Exceeded!");
+        changeHandler('output', result.error);
+      }
+      else{
+        toast.success("Code Executed Successfully");
+        changeHandler('output', result.stdout); 
+      }
     };
 
     const onSubmissionHistory = (history) => {
@@ -123,11 +145,33 @@ const CodeIDE = ({userName}) => {
       sock.disconnect();
       socketRef.current = null;
     };
-  }, []);
+  }, [Username]);
 
   const changeHandler = useCallback((field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   }, []);
+
+
+  const decodeToken = () => {
+    const token = localStorage.getItem("token");
+    if (!token) return null;
+
+    try {
+        // JWT format: header.payload.signature
+        const payload = token.split(".")[1];
+
+        // Base64URL → Base64
+        const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
+
+        const decodedPayload = JSON.parse(atob(base64));
+
+        return decodedPayload.username || null;
+
+    } catch (err) {
+        console.error("Invalid token", err);
+        return null;
+    }
+  }
 
   const updateCode = useCallback(
     (_field, code) => {
@@ -225,7 +269,7 @@ const CodeIDE = ({userName}) => {
               ))}
             </FilesListControl>
 
-            <EditorUtilityBar formData={formData} currFile={currFile} changeHandler={changeHandler} />
+            <EditorUtilityBar formData={formData} currFile={currFile} changeHandler={changeHandler} setResultToastId={setResultToastId} />
 
             <CodeEditor
               options={{

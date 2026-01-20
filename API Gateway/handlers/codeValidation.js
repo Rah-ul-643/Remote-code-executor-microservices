@@ -10,7 +10,7 @@ const patterns = {
                 /eval\s*\(/i,
                 /exec\s*\(/i,
         ],
-
+        
         java: [
                 /Runtime\.getRuntime\s*\(\)/i,
                 /ProcessBuilder/i,

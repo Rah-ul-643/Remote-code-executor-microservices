@@ -11,15 +11,14 @@ import { useState } from "react";
 function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') ? true : false);
-  const [userName, setUserName] = useState('');
 
   return (
 
     <Router>
          <Routes>
             <Route path ="/" element={<Front setIsLoggedIn={setIsLoggedIn}/>} > </Route>
-            <Route path="/editor" element={isLoggedIn ? <CodeIDE userName={userName}/> : <Login setIsLoggedIn={setIsLoggedIn} setUserName={setUserName}/>} ></Route>
-            <Route path="/login" element={isLoggedIn ? <Front setIsLoggedIn={setIsLoggedIn}/> : <Login setIsLoggedIn={setIsLoggedIn} setUserName={setUserName}/>} ></Route>
+            <Route path="/editor" element={isLoggedIn ? <CodeIDE/> : <Login setIsLoggedIn={setIsLoggedIn}/>} ></Route>
+            <Route path="/login" element={isLoggedIn ? <Front setIsLoggedIn={setIsLoggedIn}/> : <Login setIsLoggedIn={setIsLoggedIn}/>} ></Route>
             <Route path="/register" element={<Register/>} ></Route>
          </Routes>
        </Router>

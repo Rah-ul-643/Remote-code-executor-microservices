@@ -6,7 +6,7 @@ import { endpoints } from "../services/endpoints";
 import { useNavigate } from "react-router-dom";
 
 
-const Login = ({setIsLoggedIn, setUserName}) => {
+const Login = ({setIsLoggedIn}) => {
 
   const navigate = useNavigate();
 
@@ -33,11 +33,9 @@ const Login = ({setIsLoggedIn, setUserName}) => {
 
       if (response.data.success) {
         const token = response.data.token;
-        const username = response.data.username;
 
         localStorage.setItem('token', JSON.stringify(token));
         setIsLoggedIn(true);
-        setUserName(username);
 
         toast.success("Successfully logged in");
         navigate('/');

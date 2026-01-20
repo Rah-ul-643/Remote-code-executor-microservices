@@ -1,7 +1,7 @@
 import  { useEffect, useState } from 'react';
 
 import toast from 'react-hot-toast';
-import { compileCode } from '../services/codeAPIs';
+import { submitCode } from '../services/codeAPIs';
 
 import * as EditorUtilityStyles from "./styled-components/EditorUtility.styles";
 
@@ -17,7 +17,7 @@ const {
 } = EditorUtilityStyles
 
 
-const EditorUtilityBar = ({ formData, currFile, changeHandler }) => {
+const EditorUtilityBar = ({ formData, currFile, changeHandler, setResultToastId }) => {
 
     const [selectedLanguage, setSelectedLanguage] = useState("python");
     const index = formData.files.findIndex((file) => file.id === currFile);
@@ -107,10 +107,10 @@ const EditorUtilityBar = ({ formData, currFile, changeHandler }) => {
     const submitHandler = async (e) => {
         e.preventDefault();
         try {
-            console.log("Compiling code...");
-            console.log(formData.files[index]);          
-            const compiledOutput = await compileCode(formData.files[index].code, formData.input, formData.files[index].language);
-            changeHandler('output', compiledOutput);
+            console.log("Submitting code...");       
+            const toastId = await submitCode(formData.files[index].code, formData.input, formData.files[index].language);
+            setResultToastId(toastId);
+
         } catch (error) {
             console.log("Error in compiling code", error);
         }

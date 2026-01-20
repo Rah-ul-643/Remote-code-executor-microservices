@@ -4,12 +4,10 @@ import { apiConnector } from "./apiConnector";
 
 const { COMPILE_API } = endpoints
 
-export const compileCode = async (code, input, language) => {
-    const toastId = toast.loading("Compiling...");
-    let output = "";
+export const submitCode = async (code, input, language) => {
+    const submissionToastId = toast.loading("Sumitting Code...");
     
     const submissionId = await generateSubmissionId(code, input);
-    console.log(submissionId);
 
     try {
         const response = await apiConnector("POST", COMPILE_API, {
@@ -17,23 +15,22 @@ export const compileCode = async (code, input, language) => {
             code,
             language,
             input,
-        }).catch(error => {
+        })
+        .catch(error => {
             console.error("apiConnector failed:", error);
             throw error;
         });
 
-        console.log("COMPILE API RESPONSE :", response);
-        output = response.data;
+        console.log("SUBMISSION API RESPONSE :", response);
 
-        toast.success("Compiled successfully");
-        return response.data;
+        const execToastID = toast.loading("Executing code...")
+        return execToastID;
     }
     catch (error) {
         console.log("COMPILE API FAILED:", error);
 
         if (error.response.status === 400) {
-            output = error.response.data;
-            toast.error("Compilation Error!");
+            toast.error("Unknown Network Error. Try again affter some time");
         }
         else if (error.response.status === 401) {
             window.localStorage.removeItem('token');
@@ -47,10 +44,8 @@ export const compileCode = async (code, input, language) => {
         }
     }
     finally {
-        toast.dismiss(toastId);
+        toast.dismiss(submissionToastId);
     }
-
-    return output;
 }
 
 async function generateSubmissionId(code, input) {
