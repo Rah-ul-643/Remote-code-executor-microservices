@@ -116,19 +116,36 @@ const CodeIDE = () => {
       console.log("Execution Result:", result);
       toast.dismiss(ResultToastId);
       
-      if (result.status === "FAILED"){
-        toast.error("Error in Code");
-        changeHandler('output', result.stderr); 
+      var toastMsg;
+
+      switch (result.status){
+
+        case "SUCCESS":
+          toast.success("Code Executed Successfully");
+          changeHandler("output", result.stdout);
+          return;
+
+        case "FAILED":
+          toastMsg = "Error in Code";
+          break;
+
+        case "TLE":
+          toastMsg = "Time Limit Exceeded";
+          break;
+        
+        case "Unsupported Operation":
+          toastMsg = "Language Unsuported";
+          break;
+        
+        default:
+          toastMsg = "Internal Server Error";
+          break;
       }
-      else if (result.status==="TLE"){
-        toast.error("Time Limit Exceeded!");
-        changeHandler('output', result.error);
-      }
-      else{
-        toast.success("Code Executed Successfully");
-        changeHandler('output', result.stdout); 
-      }
-    };
+      
+      toast.error(toastMsg);
+      changeHandler('output', result.stderr);
+    }
+
 
     const onSubmissionHistory = (history) => {
       console.log("Submission History for current user:", history);

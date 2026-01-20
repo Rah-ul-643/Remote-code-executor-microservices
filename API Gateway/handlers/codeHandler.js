@@ -32,9 +32,7 @@ const handleCodeExecution = async (req, res) => {
 
                 if (!result){
                         console.log("Code validation failed, malicious content detected");
-                        return res.status(400).json({
-                                error: "Code contains malicious content",
-                        });
+                        return res.status(405).json("Code contains malicious content");
                 }
 
                 const requestObject = {

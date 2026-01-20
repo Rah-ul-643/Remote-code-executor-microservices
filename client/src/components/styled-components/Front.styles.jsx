@@ -8,80 +8,125 @@ export const Container = styled.div`
   width: 100vw;
   position: relative;
   flex-direction: column;
-  background-image: url("../matrix.gif");
-  background-size: cover; 
-  background-position: center; 
-  background-repeat: no-repeat;
+  background-color: #000000;
+  overflow: hidden;
+`;
+
+export const Canvas = styled.canvas`
+  position: absolute;
+  inset: 0;
+  opacity: 0.2;
+`;
+
+export const GradientOverlay = styled.div`
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8));
+  pointer-events: none;
+`;
+
+export const AmbientOrb = styled.div`
+  position: absolute;
+  width: 384px;
+  height: 384px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.05), transparent);
+  border-radius: 50%;
+  filter: blur(60px);
+  pointer-events: none;
 `;
 
 export const Nav = styled.div`
-  display:flex;
-  justify-content:space-between;
-  gap:50px;
-  right:50px;
-  top:10px;
-  height:100px;
-  position:absolute;
-  z-index:1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  position: absolute;
+  right: 32px;
+  top: 32px;
+  z-index: 20;
+
+  div {
+    display: flex;
+    gap: 12px;
+  }
 `;
 
-
 export const InfoContainer = styled.div`
-  flex: 1;
-  margin-bottom: 40px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  position: absolute;
-  top: 40;
-  background-color: transparent; /* Set the background color to transparent */
+  z-index: 10;
+  max-width: 56rem;
+  padding: 0 1rem;
 `;
 
 export const Title = styled.h1`
-  font-size: 100px;
-  font-family: 'Urbanist', serif;
-  color: white;
-  font-weight: 800;
-  margin-bottom:10px;
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-family: 'Urbanist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #ffffff;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+`;
+
+export const Divider = styled.div`
+  height: 1px;
+  width: 8rem;
+  background: linear-gradient(to right, transparent, rgba(16, 185, 129, 1), transparent);
+  margin: 0 auto 2rem;
 `;
 
 export const Desc = styled.p`
-  margin: 50px 0px;
-  font-family: 'Montaga', serif;
-  font-size: 25px;
-  letter-spacing: 3px;
-  font-weight: lighter;
-  color: white;
-  word-spacing: 6px;
-  margin-top: 0;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-family: 'Montaga', Georgia, serif;
+  color: #d1d5db;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  line-height: 1.75;
+  max-width: 48rem;
+  margin: 0 auto 2rem;
 `;
 
-
 export const ButtonContainer = styled.button`
-  border-radius:30px;
-  font-size: 1.1rem;  
-  font-family: 'serif';
-  width:150px;
-  padding:10px;
-  border:1px solid white;
-  margin: 0.5rem;
-  background-color: black;
-  box-shadow: 0 0 10px rgba(255, 0, 255, 0.5), 
-              0 0 20px rgba(0, 255, 255, 0.5), 
-              0 0 30px rgba(255, 0, 255, 0.7); /* Neon glow effect */
-  color:white;
-  text-decoration:none;
-  cursor:pointer;
-  z-index:2;
-  transition: transform 0.3s ease;
+  position: relative;
+  border-radius: 9999px;
+  font-size: 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 500;
+  padding: 12px 32px;
+  border: 2px solid rgba(16, 185, 129, 1);
+  background-color: transparent;
+  color: rgba(16, 185, 129, 1);
+  text-decoration: none;
+  cursor: pointer;
+  z-index: 2;
+  letter-spacing: 0.05em;
+  overflow: hidden;
+  transition: all 0.3s ease;
 
-  &:hover {
-    box-shadow: 0 0 10px rgba(255, 0, 255, 0.8), 
-              0 0 20px rgba(0, 255, 255, 0.9), 
-              0 0 30px rgba(255, 0, 255, 0.8); 
-    transform: scale(1.05);
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: rgba(16, 185, 129, 1);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+    z-index: -1;
   }
 
+  &:hover::before {
+    transform: scaleX(1);
+  }
+
+  &:hover {
+    color: #000000;
+    border-color: rgba(16, 185, 129, 1);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
 `;

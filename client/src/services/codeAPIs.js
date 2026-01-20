@@ -5,7 +5,7 @@ import { apiConnector } from "./apiConnector";
 const { COMPILE_API } = endpoints
 
 export const submitCode = async (code, input, language) => {
-    const submissionToastId = toast.loading("Sumitting Code...");
+    const submissionToastId = toast.loading("Submitting Code...");
     
     const submissionId = await generateSubmissionId(code, input);
 
@@ -17,7 +17,7 @@ export const submitCode = async (code, input, language) => {
             input,
         })
         .catch(error => {
-            console.error("apiConnector failed:", error);
+            console.error("Submission API call failed:", error);
             throw error;
         });
 
@@ -29,8 +29,8 @@ export const submitCode = async (code, input, language) => {
     catch (error) {
         console.log("COMPILE API FAILED:", error);
 
-        if (error.response.status === 400) {
-            toast.error("Unknown Network Error. Try again affter some time");
+        if (error.response.status === 500) {
+            toast.error("Server Error!");
         }
         else if (error.response.status === 401) {
             window.localStorage.removeItem('token');
@@ -40,7 +40,7 @@ export const submitCode = async (code, input, language) => {
             toast.error(error.response.data);
         }
         else {
-            toast.error("Server Error!");
+            toast.error("Unknown Network Error. Try again affter some time");
         }
     }
     finally {

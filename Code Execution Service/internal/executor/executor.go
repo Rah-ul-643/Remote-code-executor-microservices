@@ -20,10 +20,13 @@ func ExecuteCode(job *types.Job) (*types.Result, error) {
 		return runPython(job.Code, job.Input, TIME_LIMIT)
 	case "java":
 		return runJava(job.Code, job.Input, TIME_LIMIT)
-	case "cpp":
+	case "cpp" , "c":
 		return runCPP(job.Code, job.Input, TIME_LIMIT)
 	default:
-		return nil, fmt.Errorf("unsupported language: %s", job.Language)
+		return &types.Result{
+			Error:  "Language Not supported",
+			Status: "FAILED",
+		}, fmt.Errorf("unsupported language: %s", job.Language)
 	}
 }
 

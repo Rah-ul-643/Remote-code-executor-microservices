@@ -48,7 +48,7 @@ const EditorUtilityBar = ({ formData, currFile, changeHandler, setResultToastId 
                 defaultCode = "public class Main {\n\tpublic static void main(String[] args) {\n\t\t// your code goes here\n\t}\n}";
                 break;
             case 'c':
-                defaultCode = "#include <stdio.h>\nint main() {\n\t// your code goes here\nreturn 0;\n}";
+                defaultCode = "#include <stdio.h>\nint main() {\n\t// your code goes here\n return 0;\n}";
                 break;
             default:
                 defaultCode = "// your code goes here";
