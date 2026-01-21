@@ -1,55 +1,46 @@
-import AceEditor from 'react-ace';
+import AceEditor from "react-ace";
 
-import 'ace-builds/src-noconflict/mode-javascript';
-import 'ace-builds/src-noconflict/mode-python';
-import 'ace-builds/src-noconflict/mode-java';
-import 'ace-builds/src-noconflict/mode-csharp';
-import 'ace-builds/src-noconflict/mode-markdown';
-import 'ace-builds/src-noconflict/theme-twilight';
-import ace from 'ace-builds';
+import "ace-builds/src-noconflict/ext-language_tools";
+import "ace-builds/webpack-resolver";
 
-ace.config.set('workerPath', process.env.PUBLIC_URL + '/ace-builds/src-noconflict');
+import "ace-builds/src-noconflict/mode-python";
+import "ace-builds/src-noconflict/mode-java";
+import "ace-builds/src-noconflict/mode-c_cpp";
+import "ace-builds/src-noconflict/mode-golang";
 
-
+import "ace-builds/src-noconflict/theme-twilight";
 
 const CodeEditor = ({ field, changeHandler, options }) => {
 
-    
-    const selectMode = () => {
-
-        let mode = options.mode;
-
-        if (mode==='c' || mode==='cpp' ){
-            options.mode = 'csharp';
-        }
-        
-        return options.mode;  
+  const selectMode = () => {
+    if (options.mode === "c" || options.mode === "cpp") {
+      return "c_cpp";
     }
-    
-    return (
+    if (options.mode === "go") {
+      return "golang";
+    }
+    return options.mode;
+  };
 
-        <AceEditor
-            style={{zIndex:0}}
-            mode={selectMode()}
-            theme="twilight"
-            name={options.name}
-            onChange={(newValue) => changeHandler(field,newValue)}
-            editorProps={{ $blockScrolling: true, style: { fontFamily: 'Courier New', fontSize: 14} }}
-            width="100%"
-            height="95%"
-            value={options.value}
-            fontSize={16}
-            setOptions={{
-                enableBasicAutocompletion: true,
-                enableLiveAutocompletion: true,
-                enableSnippets: true,
-                showLineNumbers: true,
-                tabSize: 2,
-            }}            
-        />
-    )
-}
+  return (
+    <AceEditor
+      mode={selectMode()}
+      theme="twilight"
+      value={options.value}
+      name={options.name}
+      width="100%"
+      height="95%"
+      fontSize={16}
+      onChange={(value) => changeHandler(field, value)}
+      setOptions={{
+        enableBasicAutocompletion: true,
+        enableLiveAutocompletion: true,
+        enableSnippets: true,
+        showLineNumbers: true,
+        tabSize: 2,
+      }}
+    />
+  );
+};
 
 export default CodeEditor;
-
-

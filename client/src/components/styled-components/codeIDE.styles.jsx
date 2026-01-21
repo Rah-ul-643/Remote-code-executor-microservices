@@ -56,6 +56,7 @@ export const TextIOContainer = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
+  z-index:0;
 `;
 
 export const FilesListControl = styled.div`
@@ -133,14 +134,13 @@ export const RightSecTop = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex: 1;
   width: 90%;
 `;
 
 export const RightSecTopItem = styled.div`
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   flex: 1;
   position: relative;
 `;
@@ -150,13 +150,14 @@ export const RightSecTopText = styled.h2`
   ${mobile({ fontSize: "14px" })};
   font-family: "Orbitron";
   font-size: 20px;
+  
 `;
 
 export const RightSecTopImage = styled.img`
   height: 15vh;
   width: 10vw;
-  position: absolute;
-  margin-bottom: 0px;
+  position: relative;
+  margin-right: 2rem;
   ${mobile({ height: "240px", width: "260px" })};
 `;
 
@@ -168,7 +169,7 @@ export const RightSecBottom = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 50px;
+  gap: 20px;
 `;
 
 export const RightSecInputContainer = styled.div`

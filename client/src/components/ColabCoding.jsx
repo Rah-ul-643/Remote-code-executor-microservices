@@ -41,7 +41,7 @@ const GroupChat = ({roomId, setRoomId, code, socket, updateCode}) => {
     return (
         <GroupChatContainer>
             {/* Intro text */}
-            <IntroText>&lt; Invite your friends into the Matrix <br/> Let the Cypher Flow ignite! /&gt;</IntroText>
+            <IntroText>&lt; Invite your friends into the Arena /&gt;</IntroText>
             
             {/* Create Room Section */}
             <InnerContainer>

@@ -6,8 +6,9 @@ import { endpoints } from "../services/endpoints";
 import {
   Main,
   GridPattern,
-  FloatingShape,
-  CodeLine,
+  FloatingShape1,
+  FloatingShape2,
+  FloatingShape3,
   Container,
   IconWrapper,
   Title,
@@ -15,6 +16,7 @@ import {
   Form,
   InputGroup,
   Label,
+  InputIconWrapper,
   Input,
   InputIcon,
   SubmitButton,
@@ -46,7 +48,6 @@ export default function Register() {
 
       try {
         const response = await apiConnector("POST", endpoints.SIGNUP_API, formData);
-
         console.log(response.data);
 
         if (response.data.success) {
@@ -55,12 +56,10 @@ export default function Register() {
         } else {
           toast.error(response.data.message);
         }
-
       } catch (error) {
         console.log("signup Error", error);
         toast.error(`Oops! Server Issue :( \n Lemme fix it in a minute...`);
-      }
-      finally {
+      } finally {
         setFormData({
           name: "",
           username: "",
@@ -77,14 +76,9 @@ export default function Register() {
   return (
     <Main>
       <GridPattern />
-      <FloatingShape variant={1} />
-      <FloatingShape variant={2} />
-      <FloatingShape variant={3} />
-      
-      <CodeLine position={1}>{'const register = (user) => {'}</CodeLine>
-      <CodeLine position={2}>{'  await createAccount(user);'}</CodeLine>
-      <CodeLine position={3}>{'return { success: true };'}</CodeLine>
-      <CodeLine position={4}>{'};'}</CodeLine>
+      <FloatingShape1 />
+      <FloatingShape2 />
+      <FloatingShape3 />
       
       <Container>
         <IconWrapper>
@@ -104,7 +98,7 @@ export default function Register() {
               </svg>
               Name
             </Label>
-            <div style={{ position: 'relative' }}>
+            <InputIconWrapper>
               <Input 
                 name="name" 
                 onChange={changeHandler} 
@@ -118,7 +112,7 @@ export default function Register() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </InputIcon>
-            </div>
+            </InputIconWrapper>
           </InputGroup>
 
           <InputGroup>
@@ -128,7 +122,7 @@ export default function Register() {
               </svg>
               Username
             </Label>
-            <div style={{ position: 'relative' }}>
+            <InputIconWrapper>
               <Input 
                 name="username" 
                 onChange={changeHandler} 
@@ -142,7 +136,7 @@ export default function Register() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
               </InputIcon>
-            </div>
+            </InputIconWrapper>
           </InputGroup>
 
           <InputGroup>
@@ -152,7 +146,7 @@ export default function Register() {
               </svg>
               Password
             </Label>
-            <div style={{ position: 'relative' }}>
+            <InputIconWrapper>
               <Input 
                 name="password" 
                 onChange={changeHandler} 
@@ -166,7 +160,7 @@ export default function Register() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
               </InputIcon>
-            </div>
+            </InputIconWrapper>
           </InputGroup>
 
           <InputGroup>
@@ -176,7 +170,7 @@ export default function Register() {
               </svg>
               Confirm Password
             </Label>
-            <div style={{ position: 'relative' }}>
+            <InputIconWrapper>
               <Input 
                 name="password2" 
                 onChange={changeHandler} 
@@ -190,7 +184,7 @@ export default function Register() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </InputIcon>
-            </div>
+            </InputIconWrapper>
           </InputGroup>
           
           <SubmitButton type="submit">Create Account</SubmitButton>
@@ -198,7 +192,7 @@ export default function Register() {
         
         <BackLink>
           <Link to="/">
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
             Back to Home

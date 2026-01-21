@@ -18,26 +18,29 @@ const connectDB = async () => {
 const fetchSubmissionHistory = async (username) => {
         try {
                 // Find all requests for this username
-                const requests = await Request.find({ username: username });
+                const requests = await Request.find({ username }).sort({ createdAt: -1 }).limit(30);
 
-                if (requests.length === 0) {
-                        return [];
-                }
-                
                 // Get all RequestIds
-                const requestIds = requests.map(req => req.requestId);
-                
+                const requestIds = requests.map(req => req.RequestId);
+
                 // Find all results for these requests
                 const results = await Result.find({ requestId: { $in: requestIds } });
-                
+
                 console.log("Fetched requests and results for user:", username);
 
                 // Combine requests with their results
+                const resultMap = new Map(
+                        results.map(r => [r.requestId, r])
+                );
+                
                 const submissionResults = requests.map(request => {
-                        const result = results.find(r => r.requestId === request.requestId);
+                        const result = resultMap.get(request.RequestId);
+
                         return {
                                 clientSubmissionId: request.clientSubmissionId,
                                 username: request.username,
+                                language: request.language,
+                                time: request.createdAt,
                                 status: result?.status || "pending",
                                 stdout: result?.stdout || null,
                                 stderr: result?.stderr || null,
@@ -57,9 +60,9 @@ const fetchResultById = async (resultId) => {
         try {
                 const result = await Result.findOne({ resultId: resultId });
                 console.log("Fetched result with ID:", resultId);
-                
+
                 return result;
-                
+
         } catch (error) {
                 console.error('Error fetching result by ID:', error);
                 throw error;

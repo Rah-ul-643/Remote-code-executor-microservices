@@ -22,6 +22,8 @@ func ExecuteCode(job *types.Job) (*types.Result, error) {
 		return runJava(job.Code, job.Input, TIME_LIMIT)
 	case "cpp" , "c":
 		return runCPP(job.Code, job.Input, TIME_LIMIT)
+	case "golang":
+		return runGolang(job.Code, job.Input, TIME_LIMIT)
 	default:
 		return &types.Result{
 			Error:  "Language Not supported",

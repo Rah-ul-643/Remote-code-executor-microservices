@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const requestSchema = new Schema({
 
-    requestId: { type: String, required: true, unique: true },
+    RequestId: { type: String, required: true, unique: true },
     clientSubmissionId: { type: String, required: true },
     username: { type: String, required: true },
     language: { type: String, required: true },

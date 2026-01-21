@@ -34,6 +34,7 @@ const patterns = {
                 /execvp?\s*\(/i,
                 /unistd\.h/i,
         ],
+        golang: [],
 }
 
 function stripComments(code, language) {

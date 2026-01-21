@@ -108,7 +108,7 @@ const Front = ({ setIsLoggedIn }) => {
         <Divider />
         <Desc>Master Algorithms, Unleash Creativity: Begin Your Coding Odyssey Here</Desc>
         <Link to='/editor'>
-          <ButtonContainer>Start Now</ButtonContainer>
+          <ButtonContainer>Code now</ButtonContainer>
         </Link>
       </InfoContainer>
     </Container>

@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import CodeEditor from "../components/CodeEditor";
 import EditorUtilityBar from "../components/EditorUtilityBar";
 import CollabCoding from "../components/ColabCoding";
-import ChatBox from "../components/ChatBox";
+import SubmissionHistoryPanel from "../components/SubmissionHistorySideBar";
 
 import * as S from "../components/styled-components/codeIDE.styles";
 
@@ -52,6 +52,7 @@ const CodeIDE = () => {
   const [Username, setUsername] = useState('');
 
   const [currentModal, setCurrentModal] = useState(0);
+
   const [formData, setFormData] = useState({
     input: "",
     output: "",
@@ -64,6 +65,8 @@ const CodeIDE = () => {
   const [roomId, setRoomId] = useState(null);
 
   const [ResultToastId, setResultToastId] = useState('');
+
+  const [submissionHistory, setSubmissionHistory] = useState([]);
 
   // keep refs in sync for event handlers
   useEffect(() => {
@@ -96,6 +99,7 @@ const CodeIDE = () => {
       sock.emit("register-user", Username, (submissionHistory) => {
         // quiet log; useful for debugging
         console.log("Submission History:", submissionHistory);
+        setSubmissionHistory(submissionHistory);
       });
     }
 
@@ -149,6 +153,7 @@ const CodeIDE = () => {
 
     const onSubmissionHistory = (history) => {
       console.log("Submission History for current user:", history);
+      setSubmissionHistory(history);
     };
 
     sock.on("set-code", onSetCode);
@@ -248,11 +253,12 @@ const CodeIDE = () => {
     }
   }, [formData.output]);
 
-  const currentFile =
-    currentFileIndex >= 0 ? formData.files[currentFileIndex] : DEFAULT_FIRST_FILE;
+  const currentFile =  currentFileIndex >= 0 ? formData.files[currentFileIndex] : DEFAULT_FIRST_FILE;
+
 
   return (
     <Main>
+      <SubmissionHistoryPanel submissions={submissionHistory}/> 
       <MainLeftSec>
         <SectionTitleContainer>
           <ModalButton isselected={currentModal === 0} onClick={() => setCurrentModal(0)}>
@@ -317,11 +323,9 @@ const CodeIDE = () => {
         <RightSecTop>
           <RightSecTopItem>
             <RightSecTopImage src="./astro3.png" />
-          </RightSecTopItem>
-
-          <RightSecTopItem>
+          
             <RightSecTopText>
-              Break free! Enter the Cypher Matrix... <span style={{ fontWeight: 800 }}>&lt;CypherFlow /&gt;</span>
+              <span style={{ fontWeight: 800 }}>&lt;CypherFlow /&gt;</span>
             </RightSecTopText>
           </RightSecTopItem>
         </RightSecTop>
@@ -359,7 +363,6 @@ const CodeIDE = () => {
         </RightSecBottom>
       </MainRightSec>
 
-      <ChatBox />
     </Main>
   );
 };

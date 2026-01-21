@@ -34,8 +34,8 @@ const EditorUtilityBar = ({ formData, currFile, changeHandler, setResultToastId 
     };
 
     const resetToTemplate = (lang) => {
-        
-        let defaultCode = "// your code goes here";
+        console.log(lang);
+        let defaultCode;
 
         switch (lang) {
             case 'python':
@@ -49,6 +49,9 @@ const EditorUtilityBar = ({ formData, currFile, changeHandler, setResultToastId 
                 break;
             case 'c':
                 defaultCode = "#include <stdio.h>\nint main() {\n\t// your code goes here\n return 0;\n}";
+                break;
+            case 'golang':
+                defaultCode = "package main \nfunc main() { \n //your code goes here\n}";
                 break;
             default:
                 defaultCode = "// your code goes here";
@@ -78,7 +81,8 @@ const EditorUtilityBar = ({ formData, currFile, changeHandler, setResultToastId 
             python: 'py',
             cpp: 'cpp',
             java: 'java',
-            c: 'c'
+            c: 'c',
+            golang: 'go',
         };
 
         const file = event.target.files[0];
@@ -106,6 +110,7 @@ const EditorUtilityBar = ({ formData, currFile, changeHandler, setResultToastId 
 
     const submitHandler = async (e) => {
         e.preventDefault();
+        changeHandler('output', '');
         try {
             console.log("Submitting code...");       
             const toastId = await submitCode(formData.files[index].code, formData.input, formData.files[index].language);
@@ -129,6 +134,7 @@ const EditorUtilityBar = ({ formData, currFile, changeHandler, setResultToastId 
                         <option value="cpp">C++</option>
                         <option value="java">Java</option>
                         <option value="c">C</option>
+                        <option value="golang">Go</option>
                     </CustomSelect>
 
                 </MainControlModel>

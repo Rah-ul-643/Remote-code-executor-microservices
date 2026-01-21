@@ -13,7 +13,7 @@ const loginController = async (req, res) => {
         if (user) {
             if (await bcrypt.compare(password, user.password)) {
                 console.log("authenticted");
-                const token = jwt.sign({ username }, secretKey, { expiresIn: '1h' });
+                const token = jwt.sign({ username }, secretKey, { expiresIn: '24h' });
                 res.cookie('token', token,
                     {
                         httpOnly: true,
