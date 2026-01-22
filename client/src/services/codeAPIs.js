@@ -4,11 +4,9 @@ import { apiConnector } from "./apiConnector";
 
 const { COMPILE_API } = endpoints
 
-export const submitCode = async (code, input, language) => {
-    const submissionToastId = toast.loading("Submitting Code...");
-    
-    const submissionId = await generateSubmissionId(code, input);
+export const submitCode = async (submissionId, code, input, language) => {
 
+    const submissionToastId = toast.loading("Submitting Code...");
     try {
         const response = await apiConnector("POST", COMPILE_API, {
             submissionId,
@@ -48,7 +46,7 @@ export const submitCode = async (code, input, language) => {
     }
 }
 
-async function generateSubmissionId(code, input) {
+export const generateSubmissionId = async (code, input) => {
 
   const encoder = new TextEncoder();
   const data = encoder.encode(code + "||" + input);

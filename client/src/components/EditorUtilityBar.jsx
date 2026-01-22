@@ -1,7 +1,7 @@
 import  { useEffect, useState } from 'react';
 
 import toast from 'react-hot-toast';
-import { submitCode } from '../services/codeAPIs';
+import { submitCode, generateSubmissionId } from '../services/codeAPIs';
 
 import * as EditorUtilityStyles from "./styled-components/EditorUtility.styles";
 
@@ -17,7 +17,7 @@ const {
 } = EditorUtilityStyles
 
 
-const EditorUtilityBar = ({ formData, currFile, changeHandler, setResultToastId }) => {
+const EditorUtilityBar = ({ formData, currFile, changeHandler, setResultToastId, submissionHistory }) => {
 
     const [selectedLanguage, setSelectedLanguage] = useState("python");
     const index = formData.files.findIndex((file) => file.id === currFile);
@@ -111,9 +111,34 @@ const EditorUtilityBar = ({ formData, currFile, changeHandler, setResultToastId 
     const submitHandler = async (e) => {
         e.preventDefault();
         changeHandler('output', '');
+
+        const code = formData.files[index].code;
+        const input = formData.input;
+        const language = formData.files[index].language;
+
+        const submissionId = await generateSubmissionId(code, input);
+        const record = submissionHistory.find(rec => rec.clientSubmissionId === submissionId);
+
+        if (record){
+            let output = '';
+            switch (record.status) {
+                case 'SUCCESS':
+                    output = record.stdout
+                    break;
+                case "FAILED":
+                    output = record.stderr;
+                    break;
+                case "TLE":
+                    output = "Time Limit Exceeded";
+                    break;
+            }
+            changeHandler('output', output);
+            return;
+        }
+
         try {
             console.log("Submitting code...");       
-            const toastId = await submitCode(formData.files[index].code, formData.input, formData.files[index].language);
+            const toastId = await submitCode(submissionId, code, input, language);
             setResultToastId(toastId);
 
         } catch (error) {

@@ -292,7 +292,7 @@ const CodeIDE = () => {
               ))}
             </FilesListControl>
 
-            <EditorUtilityBar formData={formData} currFile={currFile} changeHandler={changeHandler} setResultToastId={setResultToastId} />
+            <EditorUtilityBar formData={formData} currFile={currFile} changeHandler={changeHandler} setResultToastId={setResultToastId} submissionHistory={submissionHistory}/>
 
             <CodeEditor
               options={{
