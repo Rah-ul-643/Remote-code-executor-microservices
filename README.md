@@ -187,3 +187,7 @@ The platform follows a **microservices-based, event-driven architecture**.
 
 
 ---
+
+# High Level Design Diagram
+
+![hld](./screenshots/hld.png)
