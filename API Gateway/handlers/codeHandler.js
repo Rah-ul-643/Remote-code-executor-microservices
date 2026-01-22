@@ -75,7 +75,7 @@ const checkRequestValidity = (req) => {
                 return false;
         }
         
-        const languageOptions = ['python', 'java', 'cpp', 'c', 'golang'];
+        const languageOptions = ['python', 'java', 'cpp', 'c'];
         if (!languageOptions.includes(req.body.language)) {
                 return false;
         }

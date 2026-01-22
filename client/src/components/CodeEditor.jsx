@@ -6,7 +6,6 @@ import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/mode-c_cpp";
-import "ace-builds/src-noconflict/mode-golang";
 
 import "ace-builds/src-noconflict/theme-twilight";
 
@@ -15,9 +14,6 @@ const CodeEditor = ({ field, changeHandler, options }) => {
   const selectMode = () => {
     if (options.mode === "c" || options.mode === "cpp") {
       return "c_cpp";
-    }
-    if (options.mode === "go") {
-      return "golang";
     }
     return options.mode;
   };

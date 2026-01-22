@@ -89,7 +89,6 @@ const SubmissionHistoryPanel = ({ submissions = [] }) => {
     const langMap = {
       python: "Python",
       java: "Java",
-      golang: "Go",
       "c/cpp": "C/C++",
     };
     return langMap[lang?.toLowerCase()] || lang || "Unknown";

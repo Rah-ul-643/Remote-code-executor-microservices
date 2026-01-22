@@ -50,9 +50,6 @@ const EditorUtilityBar = ({ formData, currFile, changeHandler, setResultToastId,
             case 'c':
                 defaultCode = "#include <stdio.h>\nint main() {\n\t// your code goes here\n return 0;\n}";
                 break;
-            case 'golang':
-                defaultCode = "package main \nfunc main() { \n //your code goes here\n}";
-                break;
             default:
                 defaultCode = "// your code goes here";
         }
@@ -82,7 +79,6 @@ const EditorUtilityBar = ({ formData, currFile, changeHandler, setResultToastId,
             cpp: 'cpp',
             java: 'java',
             c: 'c',
-            golang: 'go',
         };
 
         const file = event.target.files[0];
@@ -159,9 +155,7 @@ const EditorUtilityBar = ({ formData, currFile, changeHandler, setResultToastId,
                         <option value="cpp">C++</option>
                         <option value="java">Java</option>
                         <option value="c">C</option>
-                        <option value="golang">Go</option>
                     </CustomSelect>
-
                 </MainControlModel>
             </MainControlSec>
             <MainControlSec>
