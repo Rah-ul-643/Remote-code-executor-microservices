@@ -10,6 +10,7 @@ const auth = require("./middlewares/auth");
 
 const handleAuth = require("./handlers/authHandler");
 const handleCodeExecution = require("./handlers/codeHandler");
+const createRateLimiter = require("./middlewares/ratelimiter");
 
 const app = express();
 const PORT  = process.env.PORT || 3000;
@@ -27,16 +28,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// TODO: implement rate limiting.
-
-app.use('/auth', handleAuth);
-app.post('/code', auth, handleCodeExecution);
-
 (async () => {
         try {
                 await connectDB();
                 const redisClient = await createRedisClient();
                 app.locals.redis = redisClient;
+                const rateLimit = createRateLimiter(redisClient);
+
+                app.use('/auth', rateLimit, handleAuth);
+                app.post('/code', auth, rateLimit, handleCodeExecution);
 
                 app.listen(PORT, () => {
                         console.log(`Server is running on port ${PORT}`);

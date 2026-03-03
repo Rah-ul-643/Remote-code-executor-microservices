@@ -21,6 +21,7 @@ const EditorUtilityBar = ({ formData, currFile, changeHandler, setResultToastId,
 
     const [selectedLanguage, setSelectedLanguage] = useState("python");
     const index = formData.files.findIndex((file) => file.id === currFile);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         setSelectedLanguage(formData.files[index].language);
@@ -107,6 +108,7 @@ const EditorUtilityBar = ({ formData, currFile, changeHandler, setResultToastId,
     const submitHandler = async (e) => {
         e.preventDefault();
         changeHandler('output', '');
+        setLoading(true);
 
         const code = formData.files[index].code;
         const input = formData.input;
@@ -129,6 +131,7 @@ const EditorUtilityBar = ({ formData, currFile, changeHandler, setResultToastId,
                     break;
             }
             changeHandler('output', output);
+            setLoading(false);
             return;
         }
 
@@ -139,6 +142,9 @@ const EditorUtilityBar = ({ formData, currFile, changeHandler, setResultToastId,
 
         } catch (error) {
             console.log("Error in compiling code", error);
+        }
+        finally{
+            setLoading(false);
         }
     };
 
@@ -162,7 +168,9 @@ const EditorUtilityBar = ({ formData, currFile, changeHandler, setResultToastId,
                 <MainControlButton onClick={resetHandler}>Reset</MainControlButton>
             </MainControlSec>
             <MainControlSec>
-                <Button onClick={submitHandler}>Run</Button>
+                <Button onClick={submitHandler}>
+                    {loading ? "Running..." : "Submit"}
+                </Button>
             </MainControlSec>
         </MainControl>
     )

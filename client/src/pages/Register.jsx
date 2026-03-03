@@ -56,10 +56,18 @@ export default function Register() {
         } else {
           toast.error(response.data.message);
         }
-      } catch (error) {
-        console.log("signup Error", error);
-        toast.error(`Oops! Server Issue :( \n Lemme fix it in a minute...`);
-      } finally {
+      } 
+      
+      catch (error) {
+        console.log("Signup Error", error);
+        if (error.response && error.response.data && error.response.data.message) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error("An unexpected error occurred");
+        }
+      } 
+
+      finally {
         setFormData({
           name: "",
           username: "",
@@ -68,7 +76,9 @@ export default function Register() {
         });
         toast.dismiss(toastId);
       }
-    } else {
+    }
+    
+    else {
       toast.error("Password does not match");
     }
   };
@@ -79,17 +89,17 @@ export default function Register() {
       <FloatingShape1 />
       <FloatingShape2 />
       <FloatingShape3 />
-      
+
       <Container>
         <IconWrapper>
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
           </svg>
         </IconWrapper>
-        
+
         <Title>Create Account</Title>
         <Subtitle>Join us and start your coding journey</Subtitle>
-        
+
         <Form onSubmit={submitHandler}>
           <InputGroup>
             <Label>
@@ -99,11 +109,11 @@ export default function Register() {
               Name
             </Label>
             <InputIconWrapper>
-              <Input 
-                name="name" 
-                onChange={changeHandler} 
-                value={formData.name} 
-                placeholder="Enter your name" 
+              <Input
+                name="name"
+                onChange={changeHandler}
+                value={formData.name}
+                placeholder="Enter your name"
                 type="text"
                 required
               />
@@ -123,11 +133,11 @@ export default function Register() {
               Username
             </Label>
             <InputIconWrapper>
-              <Input 
-                name="username" 
-                onChange={changeHandler} 
-                value={formData.username} 
-                type="text" 
+              <Input
+                name="username"
+                onChange={changeHandler}
+                value={formData.username}
+                type="text"
                 placeholder="Choose a username"
                 required
               />
@@ -147,11 +157,11 @@ export default function Register() {
               Password
             </Label>
             <InputIconWrapper>
-              <Input 
-                name="password" 
-                onChange={changeHandler} 
-                value={formData.password} 
-                type="password" 
+              <Input
+                name="password"
+                onChange={changeHandler}
+                value={formData.password}
+                type="password"
                 placeholder="Create password"
                 required
               />
@@ -171,11 +181,11 @@ export default function Register() {
               Confirm Password
             </Label>
             <InputIconWrapper>
-              <Input 
-                name="password2" 
-                onChange={changeHandler} 
-                value={formData.password2} 
-                type="password" 
+              <Input
+                name="password2"
+                onChange={changeHandler}
+                value={formData.password2}
+                type="password"
                 placeholder="Confirm password"
                 required
               />
@@ -186,10 +196,10 @@ export default function Register() {
               </InputIcon>
             </InputIconWrapper>
           </InputGroup>
-          
+
           <SubmitButton type="submit">Create Account</SubmitButton>
         </Form>
-        
+
         <BackLink>
           <Link to="/">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">

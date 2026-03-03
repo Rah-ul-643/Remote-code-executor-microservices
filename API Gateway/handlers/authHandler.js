@@ -3,7 +3,8 @@ const axios = require("axios");
 const AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL || "http://localhost:5000";
 
 const handleAuth = async (req, res) => {
-
+        console.log(`Auth request received: ${req.method} ${req.originalUrl}`);
+        
         // TODO : Replace http forwarding with gRPC calls for better performance.
 
         try {

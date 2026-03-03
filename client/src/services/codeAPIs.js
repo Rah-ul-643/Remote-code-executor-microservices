@@ -21,7 +21,7 @@ export const submitCode = async (submissionId, code, input, language) => {
 
         console.log("SUBMISSION API RESPONSE :", response);
 
-        const execToastID = toast.loading("Executing code...")
+        const execToastID = toast.loading("Executing code...", {duration: 10000});
         return execToastID;
     }
     catch (error) {
@@ -37,8 +37,11 @@ export const submitCode = async (submissionId, code, input, language) => {
         else if (error.response.status === 405) {
             toast.error(error.response.data);
         }
+        else if (error.response.status === 429) {
+            toast.error("Too many requests! Please wait and try again later.");
+        }
         else {
-            toast.error("Unknown Network Error. Try again affter some time");
+            toast.error("Unknown Network Error. Try again after some time");
         }
     }
     finally {

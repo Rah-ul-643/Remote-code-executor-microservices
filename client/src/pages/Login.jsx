@@ -56,10 +56,18 @@ const Login = ({ setIsLoggedIn }) => {
         toast.error(response.data.message);
         navigate('/login');
       }
-    } catch (error) {
+    } 
+    
+    catch (error) {
       console.log("Login Error", error);
-      toast.error(`Oops! Server Issue :( \n Lemme fix it in a minute...`);
-    } finally {
+      if (error.response && error.response.data && error.response.data.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("An unexpected error occurred");
+      }
+    } 
+    
+    finally {
       setFormData({
         username: "",
         password: "",

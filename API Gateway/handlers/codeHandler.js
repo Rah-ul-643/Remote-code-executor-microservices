@@ -12,7 +12,8 @@ const handleCodeExecution = async (req, res) => {
         // 2. create request object
         // 3. save request to DB.
         // 4. publish request to job queue.
-
+        console.log(`Code execution request received: ${req.method} ${req.originalUrl} from user: ${req.username}`);
+        
         try {
                 console.log("Code execution request received for user:", req.username);
 
