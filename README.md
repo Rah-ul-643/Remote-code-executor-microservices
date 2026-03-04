@@ -141,22 +141,25 @@ The platform follows a **microservices-based, event-driven architecture**.
 
 #### 2️⃣ API Gateway
 - Handles requests
-- Authentication
 - Routing
+- Rate limiting
+
+#### 3️⃣ Authentication Service
+- Authentication
 - Validation
 
-#### 3️⃣ Execution Service
+#### 4️⃣ Execution Service
 - Runs Docker containers
 - Enforces limits
 - Compiles & executes code
 
-#### 4️⃣ Socket Service
+#### 5️⃣ Socket Service
 - Stores execution logs
 - Publishes results
 - Updates client
 - Maintains collab-coding rooms
 
-#### 5️⃣ Database
+#### 6️⃣ Database
 - Stores users
 - Submissions
 - Results
